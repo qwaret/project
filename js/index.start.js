@@ -8,15 +8,22 @@ body.style.alignItems = 'center';
 body.style.justifyContent = 'center';
 body.style.height = '100vh';
 body.style.margin = '0';
+body.style.backgroundImage = 'url("/img/project.jpg")';
+body.style.backgroundSize = 'cover';
+body.style.backgroundPosition = 'center';
+
 const heading = document.createElement('h1');
-heading.textContent = 'Welcome to the game!';
+heading.textContent = 'Welcome to the Star Game!';
 body.appendChild(heading);
+
 const ticketsDiv = document.createElement('div');
 ticketsDiv.style.marginTop = '20px';
+
 const ticketCountText = document.createElement('p');
 ticketCountText.textContent = 'Your tickets: 0';
 ticketsDiv.appendChild(ticketCountText);
 body.appendChild(ticketsDiv);
+
 const button = document.createElement('button');
 button.textContent = 'Play';
 button.style.color = 'white';
@@ -27,17 +34,21 @@ button.style.padding = '10px 20px';
 button.style.cursor = 'pointer';
 button.style.marginTop = '20px';
 body.appendChild(button);
+
 let ticketCount = localStorage.getItem('ticketCount') ? parseInt(localStorage.getItem('ticketCount')) : 0;
+
 function updateTickets() {
     ticketCountText.textContent = `Your tickets: ${ticketCount}`;
     localStorage.setItem('ticketCount', ticketCount);
 }
+
 function addTicketsEvery5Seconds() {
     setInterval(() => {
         ticketCount++;
         updateTickets();
     }, 5000);
 }
+
 function startGame() {
     body.innerHTML = '';
     const gameContainer = document.createElement('div');
@@ -46,6 +57,7 @@ function startGame() {
     gameContainer.style.height = '100vh';
     gameContainer.style.overflow = 'hidden';
     body.appendChild(gameContainer);
+
     const scoreText = document.createElement('p');
     scoreText.textContent = 'Score: 0';
     scoreText.style.color = 'white';
@@ -54,11 +66,13 @@ function startGame() {
     scoreText.style.top = '10px';
     scoreText.style.left = '10px';
     gameContainer.appendChild(scoreText);
+
     let score = 0;
     function updateScore() {
         scoreText.textContent = `Score: ${score}`;
     }
-    let gameTime = 90; 
+
+    let gameTime = 30;
     const timerText = document.createElement('p');
     timerText.style.color = 'white';
     timerText.style.position = 'absolute';
@@ -67,41 +81,55 @@ function startGame() {
     timerText.style.fontSize = '20px';
     timerText.textContent = `Time: ${gameTime}s`;
     gameContainer.appendChild(timerText);
+
     const timer = setInterval(() => {
         gameTime--;
         timerText.textContent = `Time: ${gameTime}s`;
         if (gameTime <= 0) {
             clearInterval(timer);
-            clearInterval(ballSpawner);
+            clearInterval(starSpawner);
             alert(`Game Over! Your score: ${score}`);
         }
     }, 1000);
-    function spawnBall() {
-        const ball = document.createElement('div');
+
+    function spawnStar() {
+        const star = document.createElement('div');
+        star.textContent = '★'; 
         const size = Math.random() * 50 + 20;
-        ball.style.width = `${size}px`;
-        ball.style.height = `${size}px`;
-        ball.style.borderRadius = '50%';
-        ball.style.position = 'absolute';
-        ball.style.backgroundColor = getRandomColor();
-        ball.style.left = `${Math.random() * (window.innerWidth - size)}px`;
-        ball.style.top = '-50px'; 
-        ball.style.transition = `top 3s linear`; 
-        gameContainer.appendChild(ball);
+        star.style.fontSize = `${size}px`;
+        const neonColor = '#FFFFFF';
+        star.style.color = neonColor;
+        star.style.textShadow = `
+        0 0 5px ${neonColor},
+        0 0 10px ${neonColor},
+        0 0 20px ${neonColor},
+        0 0 40px ${neonColor},
+        0 0 50px ${neonColor},
+        0 0 75px ${neonColor}
+        `;
+        star.style.position = 'absolute';
+        star.style.left = `${Math.random() * (window.innerWidth - size)}px`;
+        star.style.top = '-50px';
+        star.style.transition = `top 3s linear`;
+        gameContainer.appendChild(star);
+
         setTimeout(() => {
-            ball.style.top = `${window.innerHeight}px`;
+            star.style.top = `${window.innerHeight}px`;
         }, 0);
-        ball.addEventListener('click', () => {
+
+        star.addEventListener('click', () => {
             score++;
             updateScore();
-            ball.remove();
+            star.remove();
         });
+
         setTimeout(() => {
-            if (gameContainer.contains(ball)) {
-                ball.remove();
+            if (gameContainer.contains(star)) {
+                star.remove();
             }
         }, 3000);
     }
+
     function getRandomColor() {
         const letters = '0123456789ABCDEF';
         let color = '#';
@@ -110,16 +138,19 @@ function startGame() {
         }
         return color;
     }
-    const ballSpawner = setInterval(spawnBall, 500);
+
+    const starSpawner = setInterval(spawnStar, 300); 
 }
+
 button.addEventListener('click', () => {
     if (ticketCount > 0) {
-        ticketCount--; 
+        ticketCount--;
         updateTickets();
-        startGame(); 
+        startGame();
     } else {
-        alert('У вас недостатньо білетів для гри!');
+        alert("You don't have enough tickets for the game!");
     }
 });
+
 addTicketsEvery5Seconds();
 updateTickets();
