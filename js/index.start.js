@@ -24,6 +24,14 @@ ticketCountText.textContent = 'Your tickets: 0';
 ticketsDiv.appendChild(ticketCountText);
 body.appendChild(ticketsDiv);
 
+const scoresDiv = document.createElement('div');
+scoresDiv.style.marginTop = '20px';
+
+const score = document.createElement('p');
+score.textContent = 'Score: 0';
+scoresDiv.appendChild(score);
+body.appendChild(scoresDiv);
+
 const button = document.createElement('button');
 button.textContent = 'Play';
 button.style.color = 'white';
@@ -36,6 +44,8 @@ button.style.marginTop = '20px';
 body.appendChild(button);
 
 let ticketCount = localStorage.getItem('ticketCount') ? parseInt(localStorage.getItem('ticketCount')) : 0;
+let savedScore = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
+score.textContent = `Score: ${savedScore}`;
 
 function updateTickets() {
     ticketCountText.textContent = `Your tickets: ${ticketCount}`;
@@ -67,9 +77,10 @@ function startGame() {
     scoreText.style.left = '10px';
     gameContainer.appendChild(scoreText);
 
-    let score = 0;
+    let scoreValue = 0;  
     function updateScore() {
-        scoreText.textContent = `Score: ${score}`;
+        scoreText.textContent = `Score: ${scoreValue}`;
+        score.textContent = `Score: ${scoreValue}`;  
     }
 
     let gameTime = 30;
@@ -89,6 +100,25 @@ function startGame() {
             clearInterval(timer);
             clearInterval(starSpawner);
             alert(`Game Over! Your score: ${score}`);
+
+            let totalScore = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
+            totalScore += scoreValue;
+            localStorage.setItem('score', totalScore);
+
+            const restartButton = document.createElement('button');
+            restartButton.textContent = 'Restart Game';
+            restartButton.style.color = 'white';
+            restartButton.style.backgroundColor = 'black';
+            restartButton.style.border = '2px solid white';
+            restartButton.style.fontSize = '20px';
+            restartButton.style.padding = '10px 20px';
+            restartButton.style.cursor = 'pointer';
+            restartButton.style.marginTop = '20px';
+            body.appendChild(restartButton);
+
+            restartButton.addEventListener('click', () => {
+                location.reload(); 
+            });
         }
     }, 1000);
 
@@ -118,7 +148,7 @@ function startGame() {
         }, 0);
 
         star.addEventListener('click', () => {
-            score++;
+            scoreValue++;
             updateScore();
             star.remove();
         });
@@ -128,15 +158,6 @@ function startGame() {
                 star.remove();
             }
         }, 3000);
-    }
-
-    function getRandomColor() {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
     }
 
     const starSpawner = setInterval(spawnStar, 300); 
