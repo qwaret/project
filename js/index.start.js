@@ -161,6 +161,50 @@ function startGame() {
     }
 
     const starSpawner = setInterval(spawnStar, 300); 
+
+function spawnBadStar() {
+const badStar = document.createElement('div');
+badStar.textContent = '★';
+const size = Math.random() * 50 + 20;
+badStar.style.fontSize = `${size}px`;
+badStar.style.color = 'red';
+badStar.style.textShadow = `
+0 0 5px red,
+0 0 10px red,
+0 0 20px red,
+0 0 40px red`;
+badStar.style.position = 'absolute';
+badStar.style.left = `${Math.random() * (window.innerWidth - size)}px`;
+badStar.style.top = '-50px';
+badStar.style.transition = 'top 3s linear';
+gameContainer.appendChild(badStar);
+
+setTimeout(() => {
+    badStar.style.top = `${window.innerHeight}px`;
+}, 0);
+
+badStar.addEventListener('click', () => {
+scoreValue -= 5;
+updateScore();
+if(scoreValue < 0) {
+    endGame("Game Over! You clicked too many bad stars!");
+}
+badStar.remove();
+});
+setTimeout(() => {
+    if(gameContainer.contains(badStar)) {
+badStar.remove();
+    }
+}, 3000);
+}
+
+const badStarSpawner = setInterval(spawnBadStar, 1000); 
+
+function endGame(message) {
+    alert(message);
+    clearInterval(starSpawner);
+    clearInterval(badStarSpawner);
+ }
 }
 
 button.addEventListener('click', () => {
