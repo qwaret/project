@@ -1,5 +1,4 @@
 const body = document.body;
-body.style.backgroundColor = 'black';
 body.style.color = 'white';
 body.style.fontFamily = 'Arial, sans-serif';
 body.style.display = 'flex';
@@ -7,7 +6,6 @@ body.style.flexDirection = 'column';
 body.style.alignItems = 'center';
 body.style.justifyContent = 'center';
 body.style.height = '100vh';
-body.style.margin = '0';
 body.style.backgroundImage = 'url("/img/project.jpg")';
 body.style.backgroundSize = 'cover';
 body.style.backgroundPosition = 'center';
@@ -99,11 +97,18 @@ function startGame() {
         if (gameTime <= 0) {
             clearInterval(timer);
             clearInterval(starSpawner);
+            clearInterval(badStarSpawner);
+            clearInterval(superStarSpawner);
             alert(`Game Over! Your score: ${score}`);
 
             let totalScore = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
             totalScore += scoreValue;
             localStorage.setItem('score', totalScore);
+
+            const buttonsContainer = document.createElement('div');
+            body.style.display = 'flex';
+            buttonsContainer.style.flexDirection = 'row'; 
+            body.appendChild(buttonsContainer);
 
             const restartButton = document.createElement('button');
             restartButton.textContent = 'Restart Game';
@@ -114,13 +119,29 @@ function startGame() {
             restartButton.style.padding = '10px 20px';
             restartButton.style.cursor = 'pointer';
             restartButton.style.marginTop = '20px';
-            body.appendChild(restartButton);
+            restartButton.style.marginRight = '20px';
+            buttonsContainer.appendChild(restartButton);
 
             restartButton.addEventListener('click', () => {
-                location.reload(); 
+                startGame();
             });
-        }
-    }, 1000);
+
+    const exitButton = document.createElement('button');
+    exitButton.textContent = 'Exit';
+    exitButton.style.color = 'white';
+    exitButton.style.backgroundColor = 'black';
+    exitButton.style.border = '2px solid white';
+    exitButton.style.fontSize = '20px';
+    exitButton.style.padding = '10px 20px';
+    exitButton.style.cursor = 'pointer';
+    exitButton.style.marginTop = '20px';
+    buttonsContainer.appendChild(exitButton);
+
+    exitButton.addEventListener('click', () => {
+        location.reload(); 
+    });
+ }
+ }, 1000);
 
     function spawnStar() {
         const star = document.createElement('div');
@@ -200,10 +221,46 @@ badStar.remove();
 
 const badStarSpawner = setInterval(spawnBadStar, 1000); 
 
+function spawnSuperStar() {
+    const superStar = document.createElement('div');
+    superStar.textContent = '★';
+    const size = Math.random() * 50 + 20;
+    superStar.style.fontSize = `${size}px`;
+    superStar.style.color = 'yellow';
+    superStar.style.textShadow = `
+    0 0 5px yellow,
+    0 0 10px yellow,
+    0 0 20px yellow,
+    0 0 40px yellow`;
+    superStar.style.position = 'absolute';
+    superStar.style.left = `${Math.random() * (window.innerWidth - size)}px`;
+    superStar.style.top = '-50px';
+    superStar.style.transition = 'top 3s linear';
+    gameContainer.appendChild(superStar);
+    
+    setTimeout(() => {
+        superStar.style.top = `${window.innerHeight}px`;
+    }, 0);
+    
+    superStar.addEventListener('click', () => {
+    scoreValue += 10;
+    updateScore();
+    superStar.remove();
+    });
+    setTimeout(() => {
+        if(gameContainer.contains(superStar)) {
+    superStar.remove();
+        }
+    }, 3000);
+    }
+    
+    const superStarSpawner = setInterval(spawnSuperStar, 2000); 
+
 function endGame(message) {
     alert(message);
     clearInterval(starSpawner);
     clearInterval(badStarSpawner);
+    clearInterval(superStarSpawner);
  }
 }
 
