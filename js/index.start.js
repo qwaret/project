@@ -94,7 +94,7 @@ function startGame() {
     const timer = setInterval(() => {
         gameTime--;
         timerText.textContent = `Time: ${gameTime}s`;
-        if (gameTime <= 0) {
+        if (gameTime <= 0 || scoreValue < 0) {
             clearInterval(timer);
             clearInterval(starSpawner);
             clearInterval(badStarSpawner);
