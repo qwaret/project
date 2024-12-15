@@ -99,7 +99,6 @@ function startGame() {
             clearInterval(starSpawner);
             clearInterval(badStarSpawner);
             clearInterval(superStarSpawner);
-            alert(`Game Over! Your score: ${score}`);
 
             let totalScore = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
             totalScore += scoreValue;
@@ -207,9 +206,6 @@ setTimeout(() => {
 badStar.addEventListener('click', () => {
 scoreValue -= 5;
 updateScore();
-if(scoreValue < 0) {
-    endGame("Game Over! You clicked too many bad stars!");
-}
 badStar.remove();
 });
 setTimeout(() => {
@@ -255,13 +251,6 @@ function spawnSuperStar() {
     }
     
     const superStarSpawner = setInterval(spawnSuperStar, 2000); 
-
-function endGame(message) {
-    alert(message);
-    clearInterval(starSpawner);
-    clearInterval(badStarSpawner);
-    clearInterval(superStarSpawner);
- }
 }
 
 button.addEventListener('click', () => {
@@ -269,8 +258,6 @@ button.addEventListener('click', () => {
         ticketCount--;
         updateTickets();
         startGame();
-    } else {
-        alert("You don't have enough tickets for the game!");
     }
 });
 
