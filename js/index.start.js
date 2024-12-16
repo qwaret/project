@@ -170,7 +170,25 @@ function startGame() {
         star.addEventListener('click', () => {
             scoreValue++;
             updateScore();
-            star.remove();
+            let scale = 1;
+            let growing = true;
+    
+            const animationInterval = setInterval(() => {
+                if (growing) {
+                    scale += 0.1; 
+                    if (scale >= 1.5) growing = false; 
+                } else {
+                    scale -= 0.1; 
+                    if (scale <= 1) {
+                        clearInterval(animationInterval); 
+                    }
+                }
+    
+                star.style.transform = `scale(${scale})`; 
+            }, 30);
+            setTimeout(() => {
+                star.remove();
+            }, 200); 
         });
 
         setTimeout(() => {
@@ -206,7 +224,25 @@ setTimeout(() => {
 badStar.addEventListener('click', () => {
 scoreValue -= 5;
 updateScore();
-badStar.remove();
+let scale = 1;
+let growing = true;
+    
+const animationInterval = setInterval(() => {
+                if (growing) {
+                    scale += 0.1; 
+                    if (scale >= 1.5) growing = false; 
+                } else {
+                    scale -= 0.1; 
+                    if (scale <= 1) {
+                        clearInterval(animationInterval); 
+                    }
+                }
+    
+                badStar.style.transform = `scale(${scale})`; 
+            }, 30);
+            setTimeout(() => {
+                badStar.remove();
+            }, 200); 
 });
 setTimeout(() => {
     if(gameContainer.contains(badStar)) {
@@ -241,7 +277,25 @@ function spawnSuperStar() {
     superStar.addEventListener('click', () => {
     scoreValue += 10;
     updateScore();
-    superStar.remove();
+    let scale = 1;
+    let growing = true;
+
+    const animationInterval = setInterval(() => {
+        if (growing) {
+            scale += 0.1; 
+            if (scale >= 1.5) growing = false; 
+        } else {
+            scale -= 0.1; 
+            if (scale <= 1) {
+                clearInterval(animationInterval); 
+            }
+        }
+
+        superStar.style.transform = `scale(${scale})`; 
+    }, 30);
+    setTimeout(() => {
+        superStar.remove();
+    }, 200); 
     });
     setTimeout(() => {
         if(gameContainer.contains(superStar)) {
