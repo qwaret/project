@@ -41,20 +41,30 @@ button.style.cursor = 'pointer';
 button.style.marginTop = '20px';
 body.appendChild(button);
 
-let ticketCount = localStorage.getItem('ticketCount') ? parseInt(localStorage.getItem('ticketCount')) : 0;
-let savedScore = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
+if (!localStorage.getItem('hasVisited')) {
+    localStorage.setItem('ticketCount', 3);
+    localStorage.setItem('score', 0);
+    localStorage.setItem('hasVisited', 'true');
+}
+
+let ticketCount = parseInt(localStorage.getItem('ticketCount')) || 0;
+let savedScore = parseInt(localStorage.getItem('score')) || 0;
 score.textContent = `Score: ${savedScore}`;
+
+ticketCountText.textContent = `Your tickets: ${ticketCount}`;
 
 function updateTickets() {
     ticketCountText.textContent = `Your tickets: ${ticketCount}`;
     localStorage.setItem('ticketCount', ticketCount);
 }
 
-function addTicketsEvery5Seconds() {
+function addTicketsEveryHour() {
     setInterval(() => {
-        ticketCount++;
-        updateTickets();
-    }, 5000);
+        if (ticketCount < 24) {
+            ticketCount++;
+            updateTickets();
+        }
+    }, 3600000); 
 }
 
 function startGame() {
@@ -122,7 +132,11 @@ function startGame() {
             buttonsContainer.appendChild(restartButton);
 
             restartButton.addEventListener('click', () => {
-                startGame();
+                if (ticketCount > 0) {  
+                    ticketCount--; 
+                    updateTickets();
+                    startGame();
+                }
             });
 
     const exitButton = document.createElement('button');
