@@ -58,13 +58,18 @@ function updateTickets() {
     localStorage.setItem('ticketCount', ticketCount);
 }
 
-function addTicketsEveryHour() {
+function updateScore() {
+    score.textContent = `Score: ${scoreValue}`;
+    localStorage.setItem('score', scoreValue);
+}
+
+function addTicketsEveryMinute() {
     setInterval(() => {
         if (ticketCount < 24) {
             ticketCount++;
             updateTickets();
         }
-    }, 3600000); 
+    }, 1800000); 
 }
 
 function startGame() {
@@ -139,22 +144,22 @@ function startGame() {
                 }
             });
 
-    const exitButton = document.createElement('button');
-    exitButton.textContent = 'Exit';
-    exitButton.style.color = 'white';
-    exitButton.style.backgroundColor = 'black';
-    exitButton.style.border = '2px solid white';
-    exitButton.style.fontSize = '20px';
-    exitButton.style.padding = '10px 20px';
-    exitButton.style.cursor = 'pointer';
-    exitButton.style.marginTop = '20px';
-    buttonsContainer.appendChild(exitButton);
+            const exitButton = document.createElement('button');
+            exitButton.textContent = 'Exit';
+            exitButton.style.color = 'white';
+            exitButton.style.backgroundColor = 'black';
+            exitButton.style.border = '2px solid white';
+            exitButton.style.fontSize = '20px';
+            exitButton.style.padding = '10px 20px';
+            exitButton.style.cursor = 'pointer';
+            exitButton.style.marginTop = '20px';
+            buttonsContainer.appendChild(exitButton);
 
-    exitButton.addEventListener('click', () => {
-        location.reload(); 
-    });
- }
- }, 1000);
+            exitButton.addEventListener('click', () => {
+                location.reload(); 
+            });
+        }
+    }, 1000);
 
     function spawnStar() {
         const star = document.createElement('div');
@@ -186,7 +191,7 @@ function startGame() {
             updateScore();
             let scale = 1;
             let growing = true;
-    
+
             const animationInterval = setInterval(() => {
                 if (growing) {
                     scale += 0.1; 
@@ -197,7 +202,7 @@ function startGame() {
                         clearInterval(animationInterval); 
                     }
                 }
-    
+
                 star.style.transform = `scale(${scale})`; 
             }, 30);
             setTimeout(() => {
@@ -214,34 +219,34 @@ function startGame() {
 
     const starSpawner = setInterval(spawnStar, 300); 
 
-function spawnBadStar() {
-const badStar = document.createElement('div');
-badStar.textContent = '★';
-const size = Math.random() * 50 + 20;
-badStar.style.fontSize = `${size}px`;
-badStar.style.color = 'red';
-badStar.style.textShadow = `
-0 0 5px red,
-0 0 10px red,
-0 0 20px red,
-0 0 40px red`;
-badStar.style.position = 'absolute';
-badStar.style.left = `${Math.random() * (window.innerWidth - size)}px`;
-badStar.style.top = '-50px';
-badStar.style.transition = 'top 3s linear';
-gameContainer.appendChild(badStar);
+    function spawnBadStar() {
+        const badStar = document.createElement('div');
+        badStar.textContent = '★';
+        const size = Math.random() * 50 + 20;
+        badStar.style.fontSize = `${size}px`;
+        badStar.style.color = 'red';
+        badStar.style.textShadow = `
+        0 0 5px red,
+        0 0 10px red,
+        0 0 20px red,
+        0 0 40px red`;
+        badStar.style.position = 'absolute';
+        badStar.style.left = `${Math.random() * (window.innerWidth - size)}px`;
+        badStar.style.top = '-50px';
+        badStar.style.transition = 'top 3s linear';
+        gameContainer.appendChild(badStar);
 
-setTimeout(() => {
-    badStar.style.top = `${window.innerHeight}px`;
-}, 0);
+        setTimeout(() => {
+            badStar.style.top = `${window.innerHeight}px`;
+        }, 0);
 
-badStar.addEventListener('click', () => {
-scoreValue -= 5;
-updateScore();
-let scale = 1;
-let growing = true;
-    
-const animationInterval = setInterval(() => {
+        badStar.addEventListener('click', () => {
+            scoreValue -= 5;
+            updateScore();
+            let scale = 1;
+            let growing = true;
+            
+            const animationInterval = setInterval(() => {
                 if (growing) {
                     scale += 0.1; 
                     if (scale >= 1.5) growing = false; 
@@ -251,73 +256,73 @@ const animationInterval = setInterval(() => {
                         clearInterval(animationInterval); 
                     }
                 }
-    
+
                 badStar.style.transform = `scale(${scale})`; 
             }, 30);
             setTimeout(() => {
                 badStar.remove();
             }, 200); 
-});
-setTimeout(() => {
-    if(gameContainer.contains(badStar)) {
-badStar.remove();
-    }
-}, 3000);
-}
-
-const badStarSpawner = setInterval(spawnBadStar, 1000); 
-
-function spawnSuperStar() {
-    const superStar = document.createElement('div');
-    superStar.textContent = '★';
-    const size = Math.random() * 50 + 20;
-    superStar.style.fontSize = `${size}px`;
-    superStar.style.color = 'yellow';
-    superStar.style.textShadow = `
-    0 0 5px yellow,
-    0 0 10px yellow,
-    0 0 20px yellow,
-    0 0 40px yellow`;
-    superStar.style.position = 'absolute';
-    superStar.style.left = `${Math.random() * (window.innerWidth - size)}px`;
-    superStar.style.top = '-50px';
-    superStar.style.transition = 'top 3s linear';
-    gameContainer.appendChild(superStar);
-    
-    setTimeout(() => {
-        superStar.style.top = `${window.innerHeight}px`;
-    }, 0);
-    
-    superStar.addEventListener('click', () => {
-    scoreValue += 10;
-    updateScore();
-    let scale = 1;
-    let growing = true;
-
-    const animationInterval = setInterval(() => {
-        if (growing) {
-            scale += 0.1; 
-            if (scale >= 1.5) growing = false; 
-        } else {
-            scale -= 0.1; 
-            if (scale <= 1) {
-                clearInterval(animationInterval); 
+        });
+        setTimeout(() => {
+            if(gameContainer.contains(badStar)) {
+                badStar.remove();
             }
-        }
-
-        superStar.style.transform = `scale(${scale})`; 
-    }, 30);
-    setTimeout(() => {
-        superStar.remove();
-    }, 200); 
-    });
-    setTimeout(() => {
-        if(gameContainer.contains(superStar)) {
-    superStar.remove();
-        }
-    }, 3000);
+        }, 3000);
     }
-    
+
+    const badStarSpawner = setInterval(spawnBadStar, 1000); 
+
+    function spawnSuperStar() {
+        const superStar = document.createElement('div');
+        superStar.textContent = '★';
+        const size = Math.random() * 50 + 20;
+        superStar.style.fontSize = `${size}px`;
+        superStar.style.color = 'yellow';
+        superStar.style.textShadow = `
+        0 0 5px yellow,
+        0 0 10px yellow,
+        0 0 20px yellow,
+        0 0 40px yellow`;
+        superStar.style.position = 'absolute';
+        superStar.style.left = `${Math.random() * (window.innerWidth - size)}px`;
+        superStar.style.top = '-50px';
+        superStar.style.transition = 'top 3s linear';
+        gameContainer.appendChild(superStar);
+        
+        setTimeout(() => {
+            superStar.style.top = `${window.innerHeight}px`;
+        }, 0);
+        
+        superStar.addEventListener('click', () => {
+        scoreValue += 10;
+        updateScore();
+        let scale = 1;
+        let growing = true;
+
+        const animationInterval = setInterval(() => {
+            if (growing) {
+                scale += 0.1; 
+                if (scale >= 1.5) growing = false; 
+            } else {
+                scale -= 0.1; 
+                if (scale <= 1) {
+                    clearInterval(animationInterval); 
+                }
+            }
+
+            superStar.style.transform = `scale(${scale})`; 
+        }, 30);
+        setTimeout(() => {
+            superStar.remove();
+        }, 200); 
+        });
+        setTimeout(() => {
+            if(gameContainer.contains(superStar)) {
+        superStar.remove();
+            }
+        }, 3000);
+    }
+
     const superStarSpawner = setInterval(spawnSuperStar, 2000); 
 }
 
@@ -329,5 +334,5 @@ button.addEventListener('click', () => {
     }
 });
 
-addTicketsEvery5Seconds();
+addTicketsEveryMinute();
 updateTickets();
